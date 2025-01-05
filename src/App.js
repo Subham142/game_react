@@ -13,6 +13,10 @@ export default function AssemblyEndgame() {
     const wrongGuestCount = 
     guessletters.filter(letter => !currentWord.includes(letter)).length
 
+    const isGameWon = currentWord.split("").every(letter => guessletters.includes(letter))
+    const isGameLost = wrongGuestCount >= 8
+    const isGameOver = isGameWon || isGameLost
+
       function addGuessLetter(letter) {
         setGuessLetters(prevletters =>
           prevletters.includes(letter) ? 
@@ -71,10 +75,11 @@ export default function AssemblyEndgame() {
            <h1>Assembly: Endgame</h1>
                 <p>Guess the word within 8 attempts to keep the 
                 programming world safe from Assembly!</p>
-                <section className="game-status">
+                {isGameWon && <section className="game-status">
                     <h2>You win!</h2>
                     <p>Well done! 🎉</p>
                 </section>
+                }
                 <section className="language-chips">
                       {languagechips}
                 </section>
@@ -84,7 +89,7 @@ export default function AssemblyEndgame() {
             <section className="keyboard">
                 {keyboardElements}
             </section>
-            <button className="new-game">New Game</button>
+            {isGameOver && <button className="new-game">New Game</button>}
            </header>
         </main>
     )
