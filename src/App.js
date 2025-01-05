@@ -5,25 +5,40 @@ import { languages } from "./Language"
 
 export default function AssemblyEndgame() {
   
-    const [currentWord, setCurrentWord] = useState("Assembly")
-      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      const[guessletters, setGuessLetters] = useState([])
+    const [currentWord, setCurrentWord] = useState("asembly")
+    const alphabet = "abcdefghijklmnopqrstuvwxyz"
+    const[guessletters, setGuessLetters] = useState([])
       // console.log(guessletters)
+    
       function addGuessLetter(letter) {
         setGuessLetters(prevletters =>
-          prevletters.includes(letter) ? prevletters : [...prevletters, letter]
+          prevletters.includes(letter) ? 
+          prevletters : 
+          [...prevletters, letter]
         )
       }
 
 
       const letterElements = currentWord.split("").map((letter, index) => {
-       return( <span key={index}>{letter.toUpperCase()}</span> )
+       return( <span
+         key={index}>
+          { guessletters.includes(letter) ? letter.toUpperCase(): "" }
+          </span> )
           
       })
 
       const keyboardElements = alphabet.split("").map((letter, index) => {
+        const isGuessed = guessletters.includes(letter)
+        const isCorrect = isGuessed && currentWord.includes(letter)
+        const isWrong = isGuessed && !currentWord.includes(letter)
+        const className = clsx({
+          correct : isCorrect,
+            wrong : isWrong,
+        })
              return ( <button key={index}
-                        onClick={()=>{addGuessLetter(letter)}}>{letter}</button>)
+                      className={className}
+                        onClick={()=>{addGuessLetter(letter)}}>
+                          {letter.toUpperCase()}</button>)
        
       })
   const languagechips = languages.map((language) => {
