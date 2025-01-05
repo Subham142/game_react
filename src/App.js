@@ -10,6 +10,9 @@ export default function AssemblyEndgame() {
     const[guessletters, setGuessLetters] = useState([])
       // console.log(guessletters)
     
+    const wrongGuestCount = 
+    guessletters.filter(letter => !currentWord.includes(letter)).length
+
       function addGuessLetter(letter) {
         setGuessLetters(prevletters =>
           prevletters.includes(letter) ? 
@@ -27,7 +30,7 @@ export default function AssemblyEndgame() {
           
       })
 
-      const keyboardElements = alphabet.split("").map((letter, index) => {
+      const keyboardElements = alphabet.split("").map((letter) => {
         const isGuessed = guessletters.includes(letter)
         const isCorrect = isGuessed && currentWord.includes(letter)
         const isWrong = isGuessed && !currentWord.includes(letter)
@@ -35,20 +38,24 @@ export default function AssemblyEndgame() {
           correct : isCorrect,
             wrong : isWrong,
         })
-             return ( <button key={index}
+             return ( <button key={letter}
                       className={className}
                         onClick={()=>{addGuessLetter(letter)}}>
                           {letter.toUpperCase()}</button>)
        
       })
-  const languagechips = languages.map((language) => {
+  const languagechips = languages.map((language,index) => {
       const style = {
         backgroundColor: language.backgroundColor,
         color : language.color
       }
+
+      const isLanguageLost = index < wrongGuestCount 
+      const className = clsx("chip", isLanguageLost && "lost")
+
       return(
         <span
-        className="chip"
+        className={className}
         style={style}
         key={language.name}>
           {language.name}
