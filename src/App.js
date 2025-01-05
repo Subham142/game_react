@@ -1,9 +1,31 @@
-import React from "react"
+import { useState } from "react"
+import { clsx } from "clsx"
 import { languages } from "./Language"
-console.log(languages)
+
 
 export default function AssemblyEndgame() {
-   
+  
+    const [currentWord, setCurrentWord] = useState("Assembly")
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      const[guessletters, setGuessLetters] = useState([])
+      // console.log(guessletters)
+      function addGuessLetter(letter) {
+        setGuessLetters(prevletters =>
+          prevletters.includes(letter) ? prevletters : [...prevletters, letter]
+        )
+      }
+
+
+      const letterElements = currentWord.split("").map((letter, index) => {
+       return( <span key={index}>{letter.toUpperCase()}</span> )
+          
+      })
+
+      const keyboardElements = alphabet.split("").map((letter, index) => {
+             return ( <button key={index}
+                        onClick={()=>{addGuessLetter(letter)}}>{letter}</button>)
+       
+      })
   const languagechips = languages.map((language) => {
       const style = {
         backgroundColor: language.backgroundColor,
@@ -19,6 +41,8 @@ export default function AssemblyEndgame() {
       )
     })
 
+
+
     return (
         <main>
            <header>
@@ -32,6 +56,13 @@ export default function AssemblyEndgame() {
                 <section className="language-chips">
                       {languagechips}
                 </section>
+                <section className="word">
+                {letterElements}
+            </section>
+            <section className="keyboard">
+                {keyboardElements}
+            </section>
+            <button className="new-game">New Game</button>
            </header>
         </main>
     )
